@@ -6,6 +6,14 @@ exports.get = (req, res) => {
   })
 };
 
+exports.getById = (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    db.map((utilisateur) => {
+        if (utilisateur.id === id)
+            return res.status(200).send({ utilisateur})
+    })
+}
+
 exports.post = (req, res) => {
    console.log(req.body);
    const post = {

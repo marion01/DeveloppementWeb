@@ -3,9 +3,15 @@ import bodyParser from "body-parser";
 import MyLogger from "./middleWare/myLogger";
 import Routes from "./components";
 import mongoose from "mongoose";
+import PropertiesReader from "properties-reader";
+
+var properties = PropertiesReader('./conf.properties');
+
+var login = properties.get('login');
+var password = properties.get('password');
 
 mongoose.connect(
-  "mongodb://mabertoni:Web2018BH@ds161092.mlab.com:61092/instazz",
+    "mongodb://" + login + ":" + password + "@ds161092.mlab.com:61092/instazz",
   { useNewUrlParser: true }
 );
 mongoose.set('useCreateIndex', true);

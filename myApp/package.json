@@ -12,7 +12,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongoose": "^5.4.0"
+    "mongoose": "^5.4.0",
+    "properties-reader": "0.0.16"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
