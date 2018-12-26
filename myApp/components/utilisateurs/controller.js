@@ -1,4 +1,6 @@
-import db from "../../db/db";
+import mongoose from "mongoose";
+
+var db = mongoose.connection;
 
 exports.get = (req, res) => {
     res.status(200).send({
@@ -15,13 +17,14 @@ exports.getById = (req, res) => {
 }
 
 exports.post = (req, res) => {
+    const collection = db.collection('utilisateurs');
    console.log(req.body);
    const post = {
-       id: db.length +1,
+       id: collection.length +1,
        nom: req.body.nom,
        prenom: req.body.prenom
-   };
-   db.push(post);
+    };
+    collection.save(post);
    return res.status(201).send({
        post
    });
