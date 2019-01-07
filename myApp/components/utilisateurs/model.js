@@ -5,13 +5,10 @@ const Schema = Mongoose.Schema;
 var UtilisateurSchema = new Schema({
     nom: String,
     prenom: String,
-    img: {
-        rel: String,
-        href: String,
-    },
+    pseudo: String,
+    mdp: String
 });
 
-UtilisateurSchema.index({name: 1});
-let Utlisateurs = Mongoose.model('Utilisateurs', UtilisateurSchema);
+let utilisateurs = Mongoose.model('utilisateurs', UtilisateurSchema);
 
-export default Utlisateurs;
+export default utilisateurs;

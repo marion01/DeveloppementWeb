@@ -1,31 +1,34 @@
 import mongoose from "mongoose";
+import Utilisateur from "./model"
 
-var db = mongoose.connection;
+exports.get = async (req, res) => {
 
-exports.get = (req, res) => {
-    res.status(200).send({
-     posts: db
-  })
+    const users = await Utilisateur.find();
+    res.status(200).send(users);
 };
 
-exports.getById = (req, res) => {
-    const id = parseInt(req.params.id, 10);
-    db.map((utilisateur) => {
-        if (utilisateur.id === id)
-            return res.status(200).send({ utilisateur})
-    })
-}
+exports.getById = async (req, res) => {
+    //id = string
+    const id = req.params.id;
+    await Utilisateur.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            res.status(200).send({ doc });
+        }
+    });
+};
 
+
+//ne fonctionne pas !!
 exports.post = (req, res) => {
-    const collection = db.collection('utilisateurs');
    console.log(req.body);
    const post = {
-       id: collection.length +1,
        nom: req.body.nom,
-       prenom: req.body.prenom
+       prenom: req.body.prenom,
+       pseudo: req.body.pseudo,
+       mdp: req.body.mdp
     };
-    collection.save(post);
-   return res.status(201).send({
-       post
-   });
+    Utilisateur.create(post);
+   return res.status(201).send({ post });
 };
