@@ -20,7 +20,6 @@ exports.getById = async (req, res) => {
 };
 
 
-//ne fonctionne pas !!
 exports.post = (req, res) => {
    console.log(req.body);
    const post = {
@@ -31,4 +30,18 @@ exports.post = (req, res) => {
     };
     Utilisateur.create(post);
    return res.status(201).send({ post });
+};
+
+exports.update = async (req, res) => {
+    console.log(req.body);
+    const old = { _id: new mongoose.Types.ObjectId(req.body._id) }
+    const post = {
+            _id: req.body._id,
+            nom: req.body.nom,
+            prenom: req.body.prenom,
+            pseudo: req.body.pseudo,
+            mdp: req.body.mdp
+    }
+    await Utilisateur.update(old, post);
+    return res.status(201).send({ post });   
 };

@@ -29,3 +29,16 @@ exports.post = (req, res) => {
     Commentaires.create(post);
     return res.status(201).send({ post });
 };
+
+exports.update = async (req, res) => {
+    console.log(req.body);
+    const old = { _id: new mongoose.Types.ObjectId(req.body._id) }
+    const post = {
+        _id: req.body._id,
+        commentaire: req.body.commentaire,
+        post: req.body.post,
+        auteur: req.body.auteur
+    }
+    await Commentaires.update(old, post);
+    return res.status(201).send({ post });
+};

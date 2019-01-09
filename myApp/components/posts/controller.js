@@ -30,3 +30,16 @@ exports.post = (req, res) => {
     return res.status(201).send({ post });
 };
 
+exports.update = async (req, res) => {
+    console.log(req.body);
+    const old = { _id: new mongoose.Types.ObjectId(req.body._id) }
+    const post = {
+        _id: req.body._id,
+        auteur: req.body.auteur,
+        img: req.body.img,
+        texte: req.body.texte
+    }
+    await Posts.update(old, post);
+    return res.status(201).send({ post });
+};
+
