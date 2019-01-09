@@ -7,7 +7,9 @@ var UtilisateurSchema = new Schema({
     prenom: String,
     pseudo: String,
     mdp: String
-});
+}, {
+    versionKey: false
+    });
 
 let utilisateurs = Mongoose.model('utilisateurs', UtilisateurSchema);
 

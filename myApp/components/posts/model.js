@@ -6,7 +6,7 @@ var Posts = new Schema({
     auteur: {
         name: String,
         ref: {
-            type: Schema.types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "utilisateurs"
         }
     },
@@ -15,7 +15,9 @@ var Posts = new Schema({
         href: String,
     },
     texte: String
-});
+}, {
+        versionKey: false
+    });
 
 let posts = Mongoose.model('posts', Posts);
 

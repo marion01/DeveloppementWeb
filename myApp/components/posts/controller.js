@@ -1,10 +1,8 @@
-//jamais testé
-
 import mongoose from "mongoose";
 import Posts from "./model"
 
 exports.get = async (req, res) => {
-
+       
     const posts = await Posts.find();
     res.status(200).send(posts);
 };
@@ -22,15 +20,13 @@ exports.getById = async (req, res) => {
 };
 
 exports.post = (req, res) => {
-    const collection = db.collection('posts');
-   console.log(req.body);
+    console.log(req.body);
     const post = {
         auteur: req.body.auteur,
         img: req.body.img,
         texte: req.body.texte
     };
-    collection.save(post);
-   return res.status(201).send({
-       post
-   });
+    Posts.create(post);
+    return res.status(201).send({ post });
 };
+

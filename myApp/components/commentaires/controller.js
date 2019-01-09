@@ -1,5 +1,3 @@
-//jamais testé
-
 import mongoose from "mongoose";
 import Commentaires from "./model"
 
@@ -22,16 +20,12 @@ exports.getById = async (req, res) => {
 };
 
 exports.post = (req, res) => {
-    const collection = db.collection('commentaires');
-   console.log(req.body);
+    console.log(req.body);
     const post = {
         commentaire: req.body.commentaire,
         post: req.body.post,
         auteur: req.body.auteur
-       },
     };
-    collection.save(post);
-   return res.status(201).send({
-       post
-   });
+    Commentaires.create(post);
+    return res.status(201).send({ post });
 };
