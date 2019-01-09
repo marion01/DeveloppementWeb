@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 import Posts from "./model"
 
 exports.get = async (req, res) => {
-       
+    console.log("requete get posts");
     const posts = await Posts.find();
     res.status(200).send(posts);
 };
 
 exports.getById = async (req, res) => {
+    console.log("requete getById posts");
     //id = string
     const id = req.params.id;
     await Posts.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
