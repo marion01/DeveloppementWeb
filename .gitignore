@@ -81,3 +81,8 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+#visual studio
+.vs
+myApp/.vs/
+myApp/components/.vs/

@@ -8,6 +8,18 @@ exports.get = async (req, res) => {
     res.status(200).send(posts);
 };
 
+exports.getPostsOfAutor = async (req, res) => {
+    console.log("requete getPostsOfAutor post");
+    const id = req.params.id;
+    await Posts.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            res.status(200).send({ doc });
+        }
+    });
+};
+
 exports.getById = async (req, res) => {
     console.log("requete getById posts");
     //id = string
@@ -54,8 +66,16 @@ exports.getImageByPostId = async (req, res) => {
         } else {
             var reqPath = path.join(__dirname, '../../')
             var file = reqPath + "\\data\\" + doc.img.rel;
-            res.download(file); //set disposition and send it
+            res.download(file); 
         }
     }); 
+};
+
+exports.getImageByName = async (req, res) => {
+    console.log("requete getImageByName posts");
+    const name = req.params.name;
+    var reqPath = path.join(__dirname, '../../')
+    var file = reqPath + "\\data\\" + name;
+    res.download(file); 
 };
 

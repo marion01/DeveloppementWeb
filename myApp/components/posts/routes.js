@@ -21,6 +21,8 @@ routes.route("").get(Posts.get);
 routes.route("/:id").get(Posts.getById);
 routes.route("/post").post(Posts.post);
 routes.route("/update").post(Posts.update);
-routes.route("/image/:id").get(Posts.getImageByPostId);
+routes.route("/imageByPostId/:id").get(Posts.getImageByPostId);
+routes.route("/imageByName/:name").get(Posts.getImageByName);
+routes.route("/getPostsOfAutor/:id").get(Posts.getPostsOfAutor);
 
 export default routes;
