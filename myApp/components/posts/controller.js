@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Posts from "./model"
+import path from "path"
 
 exports.get = async (req, res) => {
     console.log("requete get posts");
@@ -42,5 +43,19 @@ exports.update = async (req, res) => {
     }
     await Posts.update(old, post);
     return res.status(201).send({ post });
+};
+
+exports.getImageByPostId = async (req, res) => {
+    console.log("requete getImageByPostId posts");
+    const id = req.params.id;
+    await Posts.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            var reqPath = path.join(__dirname, '../../')
+            var file = reqPath + "\\data\\" + doc.img.rel;
+            res.download(file); //set disposition and send it
+        }
+    }); 
 };
 
