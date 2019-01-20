@@ -42,3 +42,15 @@ exports.update = async (req, res) => {
     await Commentaires.update(old, post);
     return res.status(201).send({ post });
 };
+
+exports.getCommentairesOfPost = async (req, res) => {
+    console.log("requete getCommentairesOfPost post");
+    const id = req.params.id;
+    await Commentaires.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            res.status(200).send({ doc });
+        }
+    });
+};

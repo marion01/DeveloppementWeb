@@ -14,7 +14,8 @@ var Posts = new Schema({
         rel: String,
         href: String,
     },
-    texte: String
+    texte: String,
+    date: String
 }, {
         versionKey: false
     });
