@@ -9,12 +9,13 @@ var Commentaires = new Schema({
             ref: "posts"
     },
     auteur: {
-        name: String,
+        pseudo: String,
         ref: {
             type: Schema.Types.ObjectId,
             ref: "utilisateurs"
         }
     },
+    date: String
 }, {
         versionKey: false
     });

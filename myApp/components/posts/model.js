@@ -4,7 +4,7 @@ const Schema = Mongoose.Schema;
 
 var Posts = new Schema({
     auteur: {
-        name: String,
+        pseudo: String,
         ref: {
             type: Schema.Types.ObjectId,
             ref: "utilisateurs"
