@@ -88,3 +88,9 @@ exports.getImageByName = async (req, res) => {
     res.download(file); 
 };
 
+//enregistre une image
+exports.postImg = (req, res) => {
+    console.log("post image back")
+    console.log(req.file);
+    res.status(200).json(req.file);
+};

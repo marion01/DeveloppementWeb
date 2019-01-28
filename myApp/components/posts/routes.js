@@ -4,15 +4,16 @@ import multer from "multer"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "../../data/");
+        cb(null, "data/");
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        let date = new Date();
+        cb(null, date.toDateString() + "-" + file.originalname);
     }
 });
 
-const data = multer({ storage: storage })
-const type = data.single("photo");
+const upload = multer({ storage: storage })
+const type = upload.single("photo");
 
 
 const routes = express.Router();
@@ -24,5 +25,6 @@ routes.route("/update").post(Posts.update);
 routes.route("/imageByPostId/:id").get(Posts.getImageByPostId);
 routes.route("/imageByName/:name").get(Posts.getImageByName);
 routes.route("/getPostsOfAutor/:id").get(Posts.getPostsOfAutor);
+routes.post("/postImage", type, Posts.postImg);
 
 export default routes;
