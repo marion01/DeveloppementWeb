@@ -39,6 +39,26 @@ exports.getById = async (req, res) => {
 //enregistre un post en base
 exports.post = (req, res) => {
     console.log(req.body);
+    if (!req.body.auteur) {
+        return res.status(400).send({
+            message: "author is required"
+        })
+    }
+    if (!req.body.img) {
+        return res.status(400).send({
+            message: "image is required"
+        })
+    }
+    if (!req.body.texte) {
+        return res.status(400).send({
+            message: "text is required"
+        })
+    }
+    if (!req.body.date) {
+        return res.status(400).send({
+            message: "date is required"
+        })
+    }
     const post = {
         auteur: req.body.auteur,
         img: req.body.img,

@@ -24,6 +24,21 @@ exports.getById = async (req, res) => {
 //enregistre un commentaire
 exports.post = (req, res) => {
     console.log(req.body);
+    if (!req.body.post) {
+        return res.status(400).send({
+            message: "post is required"
+        })
+    }
+    if (!req.body.auteur) {
+        return res.status(400).send({
+            message: "author is required"
+        })
+    }
+    if (!req.body.date) {
+        return res.status(400).send({
+            message: "date is required"
+        })
+    }
     const post = {
         commentaire: req.body.commentaire,
         post: req.body.post,
