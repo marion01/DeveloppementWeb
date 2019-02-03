@@ -1,6 +1,8 @@
 import Posts from "./controller";
 import express from "express";
 import multer from "multer"
+import { verifyJWT_MW } from "../../middleWare/auth.js"
+import bodyParser from "body-parser"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -18,6 +20,9 @@ const type = upload.single("photo");
 
 const routes = express.Router();
 
+routes.use(bodyParser.json());
+routes.all("/", verifyJWT_MW);
+
 routes.route("").get(Posts.get);
 routes.route("/:id").get(Posts.getById);
 routes.route("/post").post(Posts.post);
@@ -26,5 +31,7 @@ routes.route("/imageByPostId/:id").get(Posts.getImageByPostId);
 routes.route("/imageByName/:name").get(Posts.getImageByName);
 routes.route("/getPostsOfAutor/:id").get(Posts.getPostsOfAutor);
 routes.post("/postImage", type, Posts.postImg);
+
+
 
 export default routes;
