@@ -65,3 +65,17 @@ exports.update = async (req, res) => {
     await Utilisateur.update(old, post);
     return res.status(201).send({ post });   
 };
+
+//get the id of a user think to his pseudo
+exports.getIdFromPseudo = async (req, res) => {
+    console.log("getIdFromPseudo")
+    const pseudo = req.params.pseudo;
+    console.log(pseudo)
+    await Utilisateur.findOne({ "pseudo": pseudo }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            res.status(200).send({ doc });
+        }
+    });
+};

@@ -12,5 +12,6 @@ routes.route("").get(Utilisateur.get);
 routes.route("/:id").get(Utilisateur.getById);
 routes.route("/post").post(Utilisateur.post);
 routes.route("/update").post(Utilisateur.update);
+routes.route("/getIdFromPseudo/:pseudo").get(Utilisateur.getIdFromPseudo);
 
 export default routes;

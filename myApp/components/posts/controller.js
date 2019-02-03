@@ -9,7 +9,7 @@ exports.get = async (req, res) => {
     res.status(200).send(posts);
 };
 
-//récupère l'ensemble des posts d'un utilisateur
+//récupère l'ensemble des posts d'un utilisateur avec son id en param
 exports.getPostsOfAutor = async (req, res) => {
     console.log("requete getPostsOfAutor post");
     const id = req.params.id;
