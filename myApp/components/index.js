@@ -26,7 +26,7 @@ routes.post("/api/v1/login", (req, res) => {
             //hash the password entered
             var hashPassword = crypto.createHash('sha256').update(password).digest('base64');
             console.log("hashPassword: " + hashPassword);
-
+            console.log(doc);
             //compare the hash to the one saved
             if (hashPassword === doc.mdp) {
                 //create token
