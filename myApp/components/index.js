@@ -4,33 +4,47 @@ import posts from "./posts/routes";
 import commentaires from "./commentaires/routes";
 import bodyParser from "body-parser";
 import { createJWToken } from "../libs/auth";
-
+import crypto from "crypto"
+import Utilisateur from "./utilisateurs/model"
 
 const routes = express.Router();
 
 routes.use("/api/v1/utilisateurs", utilisateurs);
 routes.use("/api/v1/posts", posts);
-
 routes.use("/api/v1/commentaires", commentaires);
 
 routes.use(bodyParser.json());
 routes.use(bodyParser.urlencoded({ extended: true }));
 
 routes.post("/api/v1/login", (req, res) => {
-    let { email, password } = req.body;
-    if (email === "toto" && password === "toto") {
-        res.status(200).json({
-            success: true,
-            token: createJWToken({
-                sessionData: { name: "toto", age: 15 },
-                maxAge: 3600
-            })
-        });
-    } else {
-        res.status(401).json({
-            message: "Login ou mot de passe incorrecte."
-        });
-    }
+    let { pseudo, password } = req.body;
+    //find password saved for the pseudo entered
+    Utilisateur.findOne({ "pseudo": pseudo }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            //hash the password entered
+            var hashPassword = crypto.createHash('sha256').update(password).digest('base64');
+            console.log("hashPassword: " + hashPassword);
+            console.log(doc);
+            //compare the hash to the one saved
+            if (hashPassword === doc.mdp) {
+                //create token
+                res.status(200).json({
+                    success: true,
+                    token: createJWToken({
+                        sessionData: { pseudo: doc.pseudo, id: doc._id }
+                    })
+                });
+            } else {
+                //error wrong password
+                res.status(401).json({
+                    message: "Login ou mot de passe incorrecte."
+                });
+            }
+        }
+    });
+   
 });
 
 routes.get("/", (req, res) => {

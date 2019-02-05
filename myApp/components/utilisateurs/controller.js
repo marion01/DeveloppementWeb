@@ -66,7 +66,7 @@ exports.update = async (req, res) => {
     return res.status(201).send({ post });   
 };
 
-//get the id of a user think to his pseudo
+//get the id of a user thank to his pseudo
 exports.getIdFromPseudo = async (req, res) => {
     console.log("getIdFromPseudo")
     const pseudo = req.params.pseudo;
