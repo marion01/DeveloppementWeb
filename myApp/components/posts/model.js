@@ -11,8 +11,7 @@ var Posts = new Schema({
         }
     },
     img: {
-        rel: String,
-        href: String,
+        rel: String
     },
     texte: String,
     date: String

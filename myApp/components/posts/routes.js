@@ -9,8 +9,9 @@ const storage = multer.diskStorage({
         cb(null, "data/");
     },
     filename: function (req, file, cb) {
-        let date = new Date();
-        cb(null, date.toDateString() + "-" + file.originalname);
+        var date = new Date();
+        date = date.toDateString();
+        cb(null, date + "-" + file.originalname);
     }
 });
 
