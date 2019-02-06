@@ -21,12 +21,12 @@ const type = upload.single("photo");
 const routes = express.Router();
 
 routes.use(bodyParser.json());
-routes.all("/", verifyJWT_MW);
+routes.all("/*", verifyJWT_MW);
 
 routes.route("").get(Posts.get);
 routes.route("/:id").get(Posts.getById);
 routes.route("/post").post(Posts.post);
-routes.route("/update").post(Posts.update);
+routes.route("/post/update").post(Posts.update);
 routes.route("/imageByPostId/:id").get(Posts.getImageByPostId);
 routes.route("/imageByName/:name").get(Posts.getImageByName);
 routes.route("/getPostsOfAutor/:id").get(Posts.getPostsOfAutor);

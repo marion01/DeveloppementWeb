@@ -5,9 +5,10 @@ export async function verifyJWTToken(token) {
     try {
         //oui a modifier plus tard
         console.log("verifyToken")
-        console.log(token)
+        console.log("token: " + token)
         const decodedToken = await jwt.verify(token, "oui");
-        console.log("verifyToken2")
+        console.log("decodedToken: " +decodedToken)
+       
         if (!decodedToken) {
             throw new err();
         }

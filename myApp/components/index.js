@@ -2,18 +2,23 @@ import express from "express";
 import utilisateurs from "./utilisateurs/routes";
 import posts from "./posts/routes";
 import commentaires from "./commentaires/routes";
-import bodyParser from "body-parser";
 import { createJWToken } from "../libs/auth";
 import crypto from "crypto"
 import Utilisateur from "./utilisateurs/model"
+import { verifyJWT_MW } from "../middleWare/auth.js"
+import bodyParser from "body-parser"
+import allowCrossDomain from "../middleware/node-express-cors-middleware";
 
 const routes = express.Router();
+routes.use(allowCrossDomain);
 
 routes.use("/api/v1/utilisateurs", utilisateurs);
 routes.use("/api/v1/posts", posts);
 routes.use("/api/v1/commentaires", commentaires);
 
 routes.use(bodyParser.json());
+routes.all("/api/v1/posts", verifyJWT_MW);
+
 routes.use(bodyParser.urlencoded({ extended: true }));
 
 routes.post("/api/v1/login", (req, res) => {
@@ -45,10 +50,6 @@ routes.post("/api/v1/login", (req, res) => {
         }
     });
    
-});
-
-routes.get("/", (req, res) => {
-    res.status(200).json({ message: "Connected!" });
 });
 
 export default routes;
