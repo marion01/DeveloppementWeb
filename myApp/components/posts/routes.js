@@ -32,6 +32,7 @@ routes.route("/imageByPostId/:id").get(Posts.getImageByPostId);
 routes.route("/imageByName/:name").get(Posts.getImageByName);
 routes.route("/getPostsOfAutor/:id").get(Posts.getPostsOfAutor);
 routes.post("/postImage", type, Posts.postImg);
+routes.delete("/delete/:id", type, Posts.delete);
 
 
 

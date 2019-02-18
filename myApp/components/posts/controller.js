@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Posts from "./model"
 import path from "path"
+import Commentaires from "../commentaires/model"
 
 //récupère l'ensemble des posts
 exports.get = async (req, res) => {
@@ -110,7 +111,36 @@ exports.getImageByName = async (req, res) => {
 
 //enregistre une image
 exports.postImg = (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({
+            message: "image is required"
+        })
+    }
     console.log("post image back")
     console.log(req.file);
     res.status(200).json(req.file);
 };
+
+//delete a post and the commentary associated
+exports.delete = async (req, res) => {
+    console.log("requete delete posts");
+    try {
+        //delete all commentary of the post
+        const id = req.params.id;
+        console.log(id)
+        let success = await Commentaires.deleteMany({ "post": new mongoose.Types.ObjectId(id) })
+           
+        if (success) {
+            //delete post
+            console.log("test")
+            let success2 = await Posts.deleteOne({ "_id": new mongoose.Types.ObjectId(id) }, )
+            if (success2) {
+                console.log("test 2")
+                return res.status(201).send()
+            }           
+        } 
+        console.log("erreur")
+    } catch (err) { 
+        console.log(err)
+    }
+}
