@@ -4,11 +4,12 @@ import MyLogger from "./middleWare/myLogger";
 import Routes from "./components";
 import mongoose from "mongoose";
 import PropertiesReader from "properties-reader";
+import dotenv from "dotenv";
 
-var properties = PropertiesReader('./conf.properties');
+dotenv.config();
 
-var login = properties.get('login');
-var password = properties.get('password');
+var login = process.env.LOGIN;
+var password = process.env.PASSWORD
 
 mongoose.connect(
     'mongodb://' + login + ':' + password + '@ds161092.mlab.com:61092/instazz',

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Posts from "./model"
 import path from "path"
 import Commentaires from "../commentaires/model"
+import fs from 'fs';
 
 //récupère l'ensemble des posts
 exports.get = async (req, res) => {
@@ -143,4 +144,14 @@ exports.delete = async (req, res) => {
     } catch (err) { 
         console.log(err)
     }
+}
+
+//delete image
+exports.deleteImg = async (req, res) => {
+    console.log("requete delete img");
+    let fileName = req.params.file;
+    let filePath = 'data/'
+    console.log("delete" + filePath + fileName)
+    fs.unlinkSync(filePath+fileName);
+    return res.status(201).send()
 }

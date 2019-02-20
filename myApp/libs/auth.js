@@ -3,9 +3,8 @@ import _ from "lodash";
 
 export async function verifyJWTToken(token) {
     try {
-        //oui a modifier plus tard
         console.log("verifyToken")
-        const decodedToken = await jwt.verify(token, "oui");
+        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
        
         if (!decodedToken) {
             throw new err();
@@ -35,12 +34,11 @@ export function createJWToken(details) {
         },
         {}
     );
-    // oui a modifier utilisation "process.env.JWT_SECRET"
     let token = jwt.sign(
         {
             data: details.sessionData
         },
-        "oui",
+        process.env.JWT_SECRET,
         {
             expiresIn: details.maxAge,
             algorithm: "HS256"
