@@ -6,7 +6,8 @@ var UtilisateurSchema = new Schema({
     nom: String,
     prenom: String,
     pseudo: String,
-    mdp: String
+    mdp: String,
+    mail: String
 }, {
     versionKey: false
     });

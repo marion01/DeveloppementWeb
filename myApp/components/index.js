@@ -33,7 +33,7 @@ routes.post("/api/v1/login", (req, res) => {
             console.log("hashPassword: " + hashPassword);
             console.log(doc);
             //compare the hash to the one saved
-            if (doc && hashPassword === doc.mdp) {
+            if (hashPassword === doc.mdp) {
                 //create token
                 res.status(200).json({
                     success: true,
@@ -52,4 +52,16 @@ routes.post("/api/v1/login", (req, res) => {
    
 });
 
+routes.get("/api/v1/searchPseudo/:pseudo", (req, res) => {
+    console.log("searchPseudo");
+    var pseudoToSearch = req.params.pseudo;
+    Utilisateur.find({},'pseudo', function (err, list) {
+        if (err) {
+            throw err;
+        } else {
+            var doc = list.filter(p => p.pseudo.toLowerCase() == pseudoToSearch.toLowerCase()).length;
+            res.status(200).send({ doc });
+        }
+    });
+});
 export default routes;
