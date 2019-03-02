@@ -33,7 +33,7 @@ routes.post("/api/v1/login", (req, res) => {
             console.log("hashPassword: " + hashPassword);
             console.log(doc);
             //compare the hash to the one saved
-            if (hashPassword === doc.mdp) {
+            if (doc && hashPassword === doc.mdp) {
                 //create token
                 res.status(200).json({
                     success: true,
