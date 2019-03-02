@@ -34,7 +34,9 @@ routes.route("/getPostsOfAutor/:id").get(Posts.getPostsOfAutor);
 routes.post("/postImage", type, Posts.postImg);
 routes.route("/delete/:id").delete(Posts.delete);
 routes.route("/deleteImg/:file").post(Posts.deleteImg);
-
-
+routes.route("/page/all").get(Posts.getByPage);
+routes.route("/page/:id").get(Posts.getByPageForUser);
+routes.route("/count/all").get(Posts.count);
+routes.route("/countForUser/:id").get(Posts.countForUser);
 
 export default routes;

@@ -11,6 +11,23 @@ exports.get = async (req, res) => {
     res.status(200).send(posts);
 };
 
+//count all the post
+exports.count = async (req, res) => {
+    console.log("requete count posts");
+    const count = await Posts.find().estimatedDocumentCount();
+    console.log(count)
+    res.status(200).send({ count });
+}
+
+//count the post of a user
+exports.countForUser = async (req, res) => {
+    console.log("requete countOfUser posts");
+    const id = req.params.id;
+    const count = await Posts.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }).countDocuments();
+    console.log(count)
+    res.status(200).send({ count });
+}
+
 //récupère l'ensemble des posts d'un utilisateur avec son id en param
 exports.getPostsOfAutor = async (req, res) => {
     console.log("requete getPostsOfAutor post");
@@ -154,4 +171,32 @@ exports.deleteImg = async (req, res) => {
     console.log("delete" + filePath + fileName)
     fs.unlinkSync(filePath+fileName);
     return res.status(201).send()
+}
+
+//get posts by page
+exports.getByPage = async (req, res) => {
+    console.log(req.query);
+    console.log("requete getByPage posts");
+    let page = req.query.page;
+    let per_page = req.query.per_page;
+    var start = (parseInt(page) - 1) * parseInt(per_page);
+    let result = await Posts.find({}).sort({date: -1})
+        .skip(start)
+        .limit(parseInt(per_page));
+   // console.log(result)
+    return res.status(201).send({result})
+}
+
+//get posts of a user by page
+exports.getByPageForUser = async (req, res) => {
+    console.log("requete getByPageForUser posts");
+    let page = req.query.page;
+    const id = req.params.id;
+    let per_page = req.query.per_page;
+    var start = (parseInt(page) - 1) * parseInt(per_page);
+    let result = await Posts.find({ "auteur.ref": new mongoose.Types.ObjectId(id) })
+        .sort({ date: -1 })
+        .skip(start)
+        .limit(parseInt(per_page));
+    return res.status(201).send({ result })
 }
