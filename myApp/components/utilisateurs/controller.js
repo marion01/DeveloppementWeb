@@ -76,6 +76,11 @@ exports.post = (req, res) => {
             message: "mdp is required"
         })
     }
+    if (!req.body.mail) {
+        return res.status(400).send({
+            message: "mail is required"
+        })
+    }
    var hashPassword = crypto.createHash('sha256').update(req.body.mdp).digest('base64');
    console.log("hashPassword: " + hashPassword);
 
@@ -91,18 +96,18 @@ exports.post = (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    console.log(req.body);
-    const old = { _id: new mongoose.Types.ObjectId(req.body._id) }
+    console.log("update ", req.body);
+    const old = { _id: new mongoose.Types.ObjectId(req.body.id) }
 
+    var hashPassword = crypto.createHash('sha256').update(req.body.mdp).digest('base64');
     const post = {
-            _id: req.body._id,
-            nom: req.body.nom,
-            prenom: req.body.prenom,
-            pseudo: req.body.pseudo,
-            mdp: hashPassword
+        nom: req.body.nom,
+        prenom: req.body.prenom,
+        mail: req.body.mail,
+        mdp: hashPassword
     }
     await Utilisateur.update(old, post);
-    return res.status(201).send({ post });   
+    return res.status(201).send({ post, success:true });   
 };
 
 //get the id of a user thank to his pseudo
@@ -119,4 +124,34 @@ exports.getIdFromPseudo = async (req, res) => {
     });
 };
 
+exports.getPasswordValidity = async (req, res) => {
+    console.log(req);
+    let pseudo = req.body.pseudo;
+    let password = req.body.password;
+    //find password saved for the pseudo entered
+    Utilisateur.findOne({ "pseudo": pseudo }, function (err, doc) {
+        if (err) {
+            throw err;
+        } else {
+            console.log(password);
+            //hash the password entered
+            var hashPassword = crypto.createHash('sha256').update(password).digest('base64');
+            console.log("hashPassword: " + hashPassword);
+            console.log(doc);
+            //compare the hash to the one saved
+            if (doc && hashPassword === doc.mdp) {
+                //create token
+                res.status(200).json({
+                    success: true
+                });
+            }else {
+                //error wrong password
+                res.status(200).json({
+                    success: false,
+                    message: "Mot de passe incorrecte."
+                });
+            }
+        }
+    });
+};
 
