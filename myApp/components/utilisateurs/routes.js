@@ -9,8 +9,9 @@ routes.use(bodyParser.json());
 routes.route("").get(Utilisateur.get);
 routes.route("/:id").get(Utilisateur.getById);
 routes.route("/:id").delete(Utilisateur.delete);
-routes.route("/post").post(Utilisateur.post);
-routes.route("/update").post(Utilisateur.update);
-routes.route("/getIdFromPseudo/:pseudo").get(Utilisateur.getIdFromPseudo);
+routes.route("/").post(Utilisateur.post);
+routes.route("/").put(Utilisateur.update);
+routes.route("/getIdFromPseudo/:pseudo").get(Utilisateur.getIdFromPseudo); 
+routes.route("/getPasswordValidity").post(Utilisateur.getPasswordValidity);
 
 export default routes;
