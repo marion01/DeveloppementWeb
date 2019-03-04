@@ -5,12 +5,23 @@ import Commentaires from "../commentaires/model"
 import Posts from "../posts/model"
 import fs from 'fs';
 
-exports.get = async (req, res) => {
 
+/*
+ * Controller of posts
+ */
+
+
+/*
+ * Get all users
+ */
+exports.get = async (req, res) => {
     const users = await Utilisateur.find();
     res.status(200).send(users);
 };
 
+/*
+ * Get a user by its id
+ */
 exports.getById = async (req, res) => {
     const id = req.params.id;
     await Utilisateur.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
@@ -22,28 +33,31 @@ exports.getById = async (req, res) => {
     });
 };
 
+/*
+ * Delete a user and its data by its id
+ */
 exports.delete = async (req, res) => {
     const id = req.params.id;
+
+    // Delete pitcure and posts
     await Posts.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }, function (err, doc) {
         if (err) {
             throw err;
         } else {
-            console.log("doc", doc);
-            console.log(doc[0]);
             for (var i in doc) {
-                console.log(doc[i]);
                 let fileName = doc[i].img.rel;
                 let filePath = 'data/'
-                console.log("delete " + filePath + fileName)
                 fs.unlinkSync(filePath + fileName);
             }
         }
     }).remove();
 
+    // Delete comments
     await Commentaires.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }, function (err, doc) {
         if (err) {
             throw err;
-        }}).remove();
+        }
+    }).remove();
 
     await Utilisateur.findByIdAndRemove(req.params.id, (err, todo) => {
         if (err) return res.status(500).send(err);
@@ -51,11 +65,10 @@ exports.delete = async (req, res) => {
     });
 };
 
-
-
-
+/*
+ * Create a new post
+ */
 exports.post = (req, res) => {
-    console.log(req.body);
     if (!req.body.nom) {
         return res.status(400).send({
             message: "name is required"
@@ -81,22 +94,23 @@ exports.post = (req, res) => {
             message: "mail is required"
         })
     }
-   var hashPassword = crypto.createHash('sha256').update(req.body.mdp).digest('base64');
-   console.log("hashPassword: " + hashPassword);
+    var hashPassword = crypto.createHash('sha256').update(req.body.mdp).digest('base64');
 
-   const post = {
-       nom: req.body.nom,
-       prenom: req.body.prenom,
-       pseudo: req.body.pseudo,
-       mdp: hashPassword,
-       mail: req.body.mail
+    const post = {
+        nom: req.body.nom,
+        prenom: req.body.prenom,
+        pseudo: req.body.pseudo,
+        mdp: hashPassword,
+        mail: req.body.mail
     };
     Utilisateur.create(post);
-   return res.status(201).send({ post,success: true });
+    return res.status(201).send({ post, success: true });
 };
 
+/*
+ * Update a post
+ */
 exports.update = async (req, res) => {
-    console.log("update ", req.body);
     const old = { _id: new mongoose.Types.ObjectId(req.body.id) }
 
     var hashPassword = crypto.createHash('sha256').update(req.body.mdp).digest('base64');
@@ -107,14 +121,14 @@ exports.update = async (req, res) => {
         mdp: hashPassword
     }
     await Utilisateur.update(old, post);
-    return res.status(201).send({ post, success:true });   
+    return res.status(201).send({ post, success: true });
 };
 
-//get the id of a user thank to his pseudo
+/*
+ * Get the id of a user by his pseudo
+ */
 exports.getIdFromPseudo = async (req, res) => {
-    console.log("getIdFromPseudo")
     const pseudo = req.params.pseudo;
-    console.log(pseudo)
     await Utilisateur.findOne({ "pseudo": pseudo }, function (err, doc) {
         if (err) {
             throw err;
@@ -124,31 +138,32 @@ exports.getIdFromPseudo = async (req, res) => {
     });
 };
 
+/*
+ * Check the validity of a password
+ */
 exports.getPasswordValidity = async (req, res) => {
-    console.log(req);
     let pseudo = req.body.pseudo;
     let password = req.body.password;
-    //find password saved for the pseudo entered
+
+    // Find password saved for the pseudo entered
     Utilisateur.findOne({ "pseudo": pseudo }, function (err, doc) {
         if (err) {
             throw err;
         } else {
-            console.log(password);
-            //hash the password entered
+            // Hash the password entered
             var hashPassword = crypto.createHash('sha256').update(password).digest('base64');
-            console.log("hashPassword: " + hashPassword);
-            console.log(doc);
-            //compare the hash to the one saved
+
+            // Compare the hash to the one saved
             if (doc && hashPassword === doc.mdp) {
-                //create token
+                // Create token
                 res.status(200).json({
                     success: true
                 });
-            }else {
-                //error wrong password
+            } else {
+                // Error wrong password
                 res.status(200).json({
                     success: false,
-                    message: "Mot de passe incorrecte."
+                    message: "Mot de passe incorrect"
                 });
             }
         }

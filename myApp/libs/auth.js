@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import _ from "lodash";
 
+/*
+ * Management of authentification
+ */
 export async function verifyJWTToken(token) {
     try {
-        console.log("verifyToken")
         const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
        
         if (!decodedToken) {

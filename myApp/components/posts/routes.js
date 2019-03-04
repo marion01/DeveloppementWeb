@@ -4,6 +4,10 @@ import multer from "multer"
 import { verifyJWT_MW } from "../../middleWare/auth.js"
 import bodyParser from "body-parser"
 
+/*
+ * Routes of posts
+ */
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "data/");

@@ -2,6 +2,10 @@ import Utilisateur from "./controller";
 import express from "express";
 import bodyParser from "body-parser"
 
+/*
+ * Routes of users
+ */
+
 const routes = express.Router();
 
 routes.use(bodyParser.json());

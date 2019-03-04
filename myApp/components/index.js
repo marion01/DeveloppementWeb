@@ -9,6 +9,13 @@ import { verifyJWT_MW } from "../middleWare/auth.js"
 import bodyParser from "body-parser"
 import allowCrossDomain from "../middleware/node-express-cors-middleware";
 
+/*
+ * Entry point of the API
+ */
+
+/*
+ * Routes
+ */
 const routes = express.Router();
 routes.use(allowCrossDomain);
 
@@ -21,20 +28,24 @@ routes.all("/api/v1/posts", verifyJWT_MW);
 
 routes.use(bodyParser.urlencoded({ extended: true }));
 
+/*
+ * Login a user
+ */
 routes.post("/api/v1/login", (req, res) => {
     let { pseudo, password } = req.body;
-    //find password saved for the pseudo entered
+
+    // Find password saved for the pseudo entered
     Utilisateur.findOne({ "pseudo": pseudo }, function (err, doc) {
         if (err) {
             throw err;
         } else {
-            //hash the password entered
+            // Hash the password entered
             var hashPassword = crypto.createHash('sha256').update(password).digest('base64');
-            console.log("hashPassword: " + hashPassword);
-            console.log(doc);
-            //compare the hash to the one saved
+
+            // Compare the hash to the one saved
             if (doc && hashPassword === doc.mdp) {
-                //create token
+
+                // Create token
                 res.status(200).json({
                     success: true,
                     token: createJWToken({
@@ -42,7 +53,7 @@ routes.post("/api/v1/login", (req, res) => {
                     })
                 });
             } else {
-                //error wrong password
+                //Error wrong password
                 res.status(401).json({
                     message: "Login ou mot de passe incorrecte."
                 });
@@ -52,8 +63,11 @@ routes.post("/api/v1/login", (req, res) => {
    
 });
 
+/*
+ * Get all pseudo correpsonding to a specified pseudo
+ * To check that a new pseudo is not already taken
+ */
 routes.get("/api/v1/searchPseudo/:pseudo", (req, res) => {
-    console.log("searchPseudo");
     var pseudoToSearch = req.params.pseudo;
     Utilisateur.find({},'pseudo', function (err, list) {
         if (err) {

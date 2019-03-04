@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import MyLogger from "./middleWare/myLogger";
 import Routes from "./components";
 import mongoose from "mongoose";
-import PropertiesReader from "properties-reader";
 import dotenv from "dotenv";
 
 dotenv.config();

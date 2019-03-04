@@ -3,6 +3,9 @@ import express from "express";
 import { verifyJWT_MW } from "../../middleWare/auth.js"
 import bodyParser from "body-parser"
 
+/*
+ * Route for Comment operations 
+ */
 const routes = express.Router();
 
 routes.use(bodyParser.json());

@@ -1,16 +1,23 @@
 import mongoose from "mongoose";
 import Commentaires from "./model"
 
-//récupère tous les commentaires
-exports.get = async (req, res) => {
+/*
+ * Controller for Commentaires
+ */
 
+
+/*
+ * Get all comments
+ */
+exports.get = async (req, res) => {
     const commentaire = await Commentaires.find();
     res.status(200).send(commentaire);
 };
 
-//récupère le commentaire correspondant à l'id
+/*
+ * Get comment corresponding to the id 
+ */
 exports.getById = async (req, res) => {
-    //id = string
     const id = req.params.id;
     await Commentaires.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
         if (err) {
@@ -21,9 +28,10 @@ exports.getById = async (req, res) => {
     });
 };
 
-//enregistre un commentaire
+/*
+ * Save a new comment
+ */
 exports.post = (req, res) => {
-    console.log(req.body);
     if (!req.body.post) {
         return res.status(400).send({
             message: "post is required"
@@ -49,9 +57,10 @@ exports.post = (req, res) => {
     return res.status(201).send({ post });
 };
 
-//met à jour un commentaire
+/*
+ * Update a comment
+ */
 exports.update = async (req, res) => {
-    console.log(req.body);
     const old = { _id: new mongoose.Types.ObjectId(req.body._id) }
     const post = {
         _id: req.body._id,
@@ -64,9 +73,10 @@ exports.update = async (req, res) => {
     return res.status(201).send({ post });
 };
 
-//récupère l'ensemble des commentaires d'un post
+/*
+ * Get all comments corresponding to a post
+ */
 exports.getCommentairesOfPost = async (req, res) => {
-    console.log("requete getCommentairesOfPost post");
     const id = req.params.id;
     await Commentaires.find({ "post": new mongoose.Types.ObjectId(id) }, function (err, doc) {
         if (err) {

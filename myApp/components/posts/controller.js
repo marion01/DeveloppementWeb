@@ -4,33 +4,41 @@ import path from "path"
 import Commentaires from "../commentaires/model"
 import fs from 'fs';
 
-//récupère l'ensemble des posts
+
+/*
+ * Controller for posts 
+ */
+
+
+/*
+ * Get all posts 
+ */
 exports.get = async (req, res) => {
-    console.log("requete get posts");
     const posts = await Posts.find();
     res.status(200).send(posts);
 };
 
-//count all the post
+/*
+ * Count the number of total post
+ */
 exports.count = async (req, res) => {
-    console.log("requete count posts");
     const count = await Posts.find().estimatedDocumentCount();
-    console.log(count)
     res.status(200).send({ count });
 }
 
-//count the post of a user
+/*
+ * Count number of post of a user
+ */
 exports.countForUser = async (req, res) => {
-    console.log("requete countOfUser posts");
     const id = req.params.id;
     const count = await Posts.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }).countDocuments();
-    console.log(count)
     res.status(200).send({ count });
 }
 
-//récupère l'ensemble des posts d'un utilisateur avec son id en param
+/*
+ * Get all posts of an user by its id
+ */
 exports.getPostsOfAutor = async (req, res) => {
-    console.log("requete getPostsOfAutor post");
     const id = req.params.id;
     await Posts.find({ "auteur.ref": new mongoose.Types.ObjectId(id) }, function (err, doc) {
         if (err) {
@@ -41,9 +49,10 @@ exports.getPostsOfAutor = async (req, res) => {
     });
 };
 
-//récupère un post avec son id
+/*
+ * Get a post by its id
+ */
 exports.getById = async (req, res) => {
-    console.log("requete getById posts");
     //id = string
     const id = req.params.id;
     await Posts.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
@@ -55,9 +64,10 @@ exports.getById = async (req, res) => {
     });
 };
 
-//enregistre un post en base
+/*
+ * Save a new post
+ */
 exports.post = (req, res) => {
-    console.log(req.body);
     if (!req.body.auteur) {
         return res.status(400).send({
             message: "author is required"
@@ -88,9 +98,10 @@ exports.post = (req, res) => {
     return res.status(201).send({ post });
 };
 
-//met a jour le post de l'id indiqué dans la requete
+/*
+ * Update post by its id
+ */
 exports.update = async (req, res) => {
-    console.log(req.body);
     const old = { _id: new mongoose.Types.ObjectId(req.body._id) }
     const post = {
         _id: req.body._id,
@@ -103,9 +114,10 @@ exports.update = async (req, res) => {
     return res.status(201).send({ post });
 };
 
-//récupère l'image d'un post déterminé par son id
+/*
+ * Get image of a post by posts id
+ */
 exports.getImageByPostId = async (req, res) => {
-    console.log("requete getImageByPostId posts");
     const id = req.params.id;
     await Posts.findOne({ "_id": new mongoose.Types.ObjectId(id) }, function (err, doc) {
         if (err) {
@@ -118,78 +130,76 @@ exports.getImageByPostId = async (req, res) => {
     }); 
 };
 
-//récupère une image par son nom
+/*
+ * Get a image by its name
+ */
 exports.getImageByName = async (req, res) => {
-    console.log("requete getImageByName posts");
     const name = req.params.name;
     var reqPath = path.join(__dirname, '../../')
     var file = reqPath + "\\data\\" + name;
     res.download(file); 
 };
 
-//enregistre une image
+/*
+ * Save a new image 
+ */
 exports.postImg = (req, res) => {
     if (!req.file) {
         return res.status(400).send({
             message: "image is required"
         })
     }
-    console.log("post image back")
-    console.log(req.file);
     res.status(200).json(req.file);
 };
 
-//delete a post and the commentary associated
+/*
+ * Delete a post and the commentary associated
+ */
 exports.delete = async (req, res) => {
-    console.log("requete delete posts");
     try {
-        //delete all commentary of the post
+        // Delete all commentary of the post
         const id = req.params.id;
-        console.log(id)
         let success = await Commentaires.deleteMany({ "post": new mongoose.Types.ObjectId(id) })
            
         if (success) {
-            //delete post
-            console.log("test")
+            // Delete post
             let success2 = await Posts.deleteOne({ "_id": new mongoose.Types.ObjectId(id) }, )
             if (success2) {
-                console.log("test 2")
                 return res.status(201).send()
             }           
         } 
-        console.log("erreur")
     } catch (err) { 
         console.log(err)
     }
 }
 
-//delete image
+/*
+ * Delete image
+ */
 exports.deleteImg = async (req, res) => {
-    console.log("requete delete img");
     let fileName = req.params.file;
     let filePath = 'data/'
-    console.log("delete" + filePath + fileName)
     fs.unlinkSync(filePath+fileName);
     return res.status(201).send()
 }
 
-//get posts by page
+/*
+ * Get posts by page
+ */
 exports.getByPage = async (req, res) => {
-    console.log(req.query);
-    console.log("requete getByPage posts");
     let page = req.query.page;
     let per_page = req.query.per_page;
     var start = (parseInt(page) - 1) * parseInt(per_page);
     let result = await Posts.find({}).sort({date: -1})
         .skip(start)
         .limit(parseInt(per_page));
-   // console.log(result)
     return res.status(201).send({result})
 }
 
-//get posts of a user by page
+/*
+ * Get posts of a user by page
+ */
 exports.getByPageForUser = async (req, res) => {
-    console.log("requete getByPageForUser posts");
     let page = req.query.page;
     const id = req.params.id;
     let per_page = req.query.per_page;
