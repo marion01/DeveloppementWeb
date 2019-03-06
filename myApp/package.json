@@ -1,7 +1,7 @@
 {
   "name": "myapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is the API for the InstaZZ WebSite",
   "main": "app.js",
   "scripts": {
     "start": "node_modules/.bin/nodemon app.js --exec babel-node --",
@@ -9,6 +9,10 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marion01/DeveloppementWebBack.git"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -16,7 +20,7 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
-    "mongoose": "^5.4.0",
+    "mongoose": "^4.1.12",
     "mongoose-auto-increment": "^5.0.1",
     "multer": "^1.4.1",
     "properties-reader": "0.0.16"
